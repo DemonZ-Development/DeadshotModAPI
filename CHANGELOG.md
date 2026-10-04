@@ -4,7 +4,37 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-## [Unreleased] - 2026-10-02
+## [1.1.1-dev-alpha] - 2026-10-02
+
+### Added
+
+* `SceneLoadWaiter.GetPlayer()` — extracted helper that resolves the player `GameObject` from `Deadshot.GameManager`.
+* `SceneLoadWaiter.DisableAllCameras()` — extracted helper that disables all cameras except the player's `Head/MainCamera`.
+* `SceneLoadWaiter.DisableMenuAndSceneRenderers()` — extracted helper that hides `MainMenu` canvases and `C1L2` scene renderers, excluding the player.
+* `SceneLoadWaiter.GetCustomScene()` — extracted helper that scans loaded scenes by name and returns the matching `Scene`.
+* `SceneLoadWaiter.FindCustomPlayerSpawn(Scene)` — updated to accept the already-resolved `Scene` instead of re-scanning for it.
+* Added null guards and restored deep recursive traversal in `FindChildRecursive` to support nested hierarchy spawn points.
+* Player `CharacterController` is now restored in a `finally` block, ensuring it is re-enabled even if player placement throws.
+* `SceneManager.BaseGameplaySceneName` constant to avoid hardcoded scene name strings.
+* `AsyncOperation` tracking for asynchronous scene unloads to prevent reload race conditions.
+
+### Changed
+
+* `SceneLoadWaiter.InitializePlayer()` refactored to delegate player, camera, and renderer setup to dedicated helper methods.
+* Corrected the renderer-filtering scene name from `C1L1` to `C1L2`.
+* `SceneManager.LoadScene()` cleans up existing waiters and passes any pending unload operation to the new waiter.
+* `SceneLoadWaiter` destroys its `GameObject` upon placement completion or spawn search timeout.
+* `EventManager.Update()` converted from a static method to an instance lifecycle method on `MonoBehaviour`.
+
+### Fixed
+
+* Resolved persistent `SceneLoadWaiter` memory leak and CPU overhead after scene load.
+* Fixed broken child traversal in `FindChildRecursive` failing on nested spawn points.
+* Fixed race condition where reloading an already loaded scene attempted placement before unloader completed.
+* Fixed `EventManager.Update()` not being invoked by Unity's engine loop.
+* Removed stray blank lines from `EventManager.LevelPlaytimeEvent()`.
+
+## [1.1.0-dev-alpha] - 2026-10-02
 
 ### Added
 - `SceneLoadWaiter` MonoBehaviour for additive custom-scene loading while preserving the existing gameplay scene and player.

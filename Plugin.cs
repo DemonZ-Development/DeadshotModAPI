@@ -4,7 +4,7 @@ using HarmonyLib;
 
 namespace DeadshotModAPI;
 
-[BepInPlugin("com.subaka.deadshotmodapi", "Deadshot Mod API", "v1.0.0-dev-alpha")]
+[BepInPlugin("com.subaka.deadshotmodapi", "Deadshot Mod API", "v1.1.1-dev-alpha")]
 public class Plugin : BasePlugin
 {
 
@@ -15,6 +15,5 @@ public class Plugin : BasePlugin
         harmony.PatchAll();
         AddComponent<ModLoader>();
         AddComponent<EventManager>();
-        AddComponent<SceneLoadWaiter>();
     }
 }
